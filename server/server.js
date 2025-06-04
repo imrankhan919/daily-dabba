@@ -9,6 +9,12 @@ const PORT = process.env.PORT || 3000
 // DB CONNECTION
 connectDB()
 
+// Body-Parser
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+
+
 // Default Route
 app.get("/", (req, res) => {
     res.json({
