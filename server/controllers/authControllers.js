@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const User = require("../models/userModel")
+const jwt = require('jsonwebtoken')
 
 const registerUser = async (req, res) => {
 
@@ -58,7 +59,8 @@ const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        isAdmin: user.isAdmin
+        isAdmin: user.isAdmin,
+        token: generatToken(user._id)
     })
 
 }
@@ -77,18 +79,27 @@ const loginUser = async (req, res) => {
 
     if (user && await bcrypt.compare(password, user.password)) {
         res.status(200).json({
+            _id: user._id,
             name: user.name,
             email: user.email,
             phone: user.phone,
-            isAdmin: user.isAdmin
+            isAdmin: user.isAdmin,
+            token: generatToken(user._id)
         })
     } else {
         res.status(400)
         throw new Error('Invalid Credentials')
     }
-
-
-
 }
+
+
+// Generate Token
+const generatToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+}
+
+
 
 module.exports = { registerUser, loginUser }

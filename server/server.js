@@ -2,6 +2,7 @@ const express = require('express')
 require('dotenv').config()
 const colors = require('colors')
 const connectDB = require('./config/dbConfig')
+const errorHandler = require('./middleware/errorHandler')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -34,5 +35,7 @@ app.use("/api/order", require("./routes/orderRoutes"))
 // Rating Route
 app.use("/api/rating", require("./routes/ratingsRoutes"))
 
+// Error Handler
+app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`SERVER IS RUNNING AT PORT : ${PORT}`.bgBlue.black))
