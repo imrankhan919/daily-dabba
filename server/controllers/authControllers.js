@@ -92,6 +92,11 @@ const loginUser = async (req, res) => {
     }
 }
 
+const privateController = (req, res) => {
+    res.json(req.user)
+}
+
+
 
 // Generate Token
 const generatToken = (id) => {
@@ -102,4 +107,4 @@ const generatToken = (id) => {
 
 
 
-module.exports = { registerUser, loginUser }
+module.exports = { registerUser, loginUser, privateController }
