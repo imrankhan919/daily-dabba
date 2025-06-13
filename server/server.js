@@ -29,6 +29,9 @@ app.use('/api/auth', require("./routes/authRoutes"))
 // Admin Routes
 app.use("/api/admin", require("./routes/adminRoutes"))
 
+// Meal Routes
+app.use("/api/meal", require("./routes/mealRoute"))
+
 // Order Routes
 app.use("/api/order", require("./routes/orderRoutes"))
 
