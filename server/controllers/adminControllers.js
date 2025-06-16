@@ -1,5 +1,6 @@
 const User = require('../models/userModel')
 const Meal = require('../models/mealModel')
+const Order = require('../models/orderModel')
 
 
 const addMeal = async (req, res) => {
@@ -64,11 +65,31 @@ const viewAllRatings = async (req, res) => {
 }
 
 const viewAllOrders = async (req, res) => {
-    res.send('All Orders')
+
+    const orders = await Order.find().populate('user').populate('meal')
+
+    if (!orders) {
+        res.status(404)
+        throw new Error('Orders Not Found!')
+    }
+
+    res.status(200).json(orders)
+
 }
 
 const updateOrder = async (req, res) => {
-    res.send('Order Updated')
+
+    const orderExist = await Order.findById(req.params.oid)
+
+    if (!orderExist) {
+        res.status(404)
+        throw new Error('Order Not Found')
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(req.params.oid, req.body, { new: true })
+
+    res.status(200).json(updatedOrder)
+
 }
 
 
