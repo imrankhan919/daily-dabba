@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { ToastContainer } from "react-toastify"
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from "./pages/Home"
@@ -13,6 +14,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminMeals from './pages/admin/AdminMeals'
 import AdminRating from './pages/admin/AdminRating'
+import Meals from './pages/Meals'
 
 const App = () => {
   return (
@@ -23,6 +25,7 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/meals' element={<Meals />} />
           <Route path='/meal/:id' element={<ViewMeal />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/my-profile' element={<Profile />} />
@@ -33,6 +36,7 @@ const App = () => {
           <Route path='/admin/ratings' element={<AdminRating />} />
         </Routes>
         <Footer />
+        <ToastContainer />
       </div>
     </Router>
   )

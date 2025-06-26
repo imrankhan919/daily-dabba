@@ -1,13 +1,66 @@
 import { ShoppingBag, Mail, Lock } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../features/auth/authSlice';
+import Loader from '../components/Loader';
+import { toast } from 'react-toastify';
 
 const Login = () => {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const { user, isLoading, isSuccess, isError, message } = useSelector(state => state.auth)
+
+    const [formData, setFormData] = useState({ email: "", password: "" })
+
+    const { email, password } = formData
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        dispatch(loginUser(formData))
+
+    }
+
+
+    useEffect(() => {
+
+        if (user) {
+            navigate("/")
+        }
+
+        if (isError && message) {
+            toast.error(message)
+        }
+
+
+    }, [user, isError, message])
+
+
+    if (isLoading) {
+        return (
+            <Loader />
+        )
+    }
+
+
+
     return (
         <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-rose-50 flex items-center justify-center py-12 px-4">
             <div className="max-w-md w-full">
                 {/* Login Form */}
                 <div className="bg-white rounded-2xl shadow-xl p-8">
                     <h2 className="text-2xl font-bold text-gray-800 text-center mb-8">Login</h2>
-                    <form className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                 Email Address
@@ -17,6 +70,9 @@ const Login = () => {
                                 <input
                                     type="email"
                                     id="email"
+                                    name='email'
+                                    value={email}
+                                    onChange={handleChange}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition duration-200"
                                     placeholder="Enter your email"
                                 />
@@ -32,6 +88,9 @@ const Login = () => {
                                 <input
                                     type="password"
                                     id="password"
+                                    name='password'
+                                    value={password}
+                                    onChange={handleChange}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition duration-200"
                                     placeholder="Enter your password"
                                 />
