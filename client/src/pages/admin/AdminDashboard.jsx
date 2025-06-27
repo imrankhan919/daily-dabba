@@ -1,22 +1,61 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { toast } from 'react-toastify'
 import {
-    ShoppingBag,
     Users,
-    UtensilsCrossed,
     ShoppingCart,
     Star,
     BarChart3,
-    Settings,
     Bell,
     Search,
     Menu
 } from 'lucide-react';
 
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../../components/Loader';
+import { getAllOrders, getAllRatings, getAllUsers } from '../../features/admin/adminSlice';
+
+
 const AdminDashboard = () => {
+
+    const dispatch = useDispatch()
+
+    const { users, allOrders, allRatings, adminLoading, adminSuccess, adminError, adminErrorMessage } = useSelector(state => state.admin)
+
+    // Calculate Revenue
+    const revenue = allOrders.filter(order => order.status !== "cancelled").reduce((p, c) => p + c.meal.price, 0)
+
+    // Average Rating
+    const avgRating = allRatings.reduce((p, c) => p + c.rating / allRatings.length, 0)
+
+    useEffect(() => {
+
+        // Fetch All Users
+        dispatch(getAllUsers())
+
+        // Fetch All Orders
+        dispatch(getAllOrders())
+
+        // Fetch All Ratings
+        dispatch(getAllRatings())
+
+
+        if (adminError && adminErrorMessage) {
+            toast.error(adminErrorMessage)
+        }
+
+    }, [adminError, adminErrorMessage])
+
+
+
+    if (adminLoading) {
+        return <Loader />
+    }
+
+
     return (
         <div className="ml-64 flex-1">
             {/* Top Bar */}
-            <header className="bg-white shadow-sm border-b h-16 flex items-center justify-between px-6">
+            <header className="bg-white shadow-sm border-gray-500-b h-16 flex items-center justify-between px-6">
                 <div className="flex items-center">
                     <Menu className="h-6 w-6 text-gray-600 md:hidden" />
                     <h1 className="text-2xl font-semibold text-gray-800 ml-4">Dashboard</h1>
@@ -28,7 +67,7 @@ const AdminDashboard = () => {
                         <input
                             type="text"
                             placeholder="Search..."
-                            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                            className="pl-10 pr-4 py-2 border-gray-500 border-gray-500-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-gray-500-orange-500 outline-none"
                         />
                     </div>
                     <Bell className="h-6 w-6 text-gray-600" />
@@ -42,11 +81,11 @@ const AdminDashboard = () => {
             <main className="p-6">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white rounded-xl shadow-sm p-6 border">
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-gray-500">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-gray-600">Total Users</p>
-                                <p className="text-3xl font-bold text-gray-800">2,847</p>
+                                <p className="text-3xl font-bold text-gray-800">{users?.length}</p>
                             </div>
                             <div className="bg-blue-50 p-3 rounded-lg">
                                 <Users className="h-8 w-8 text-blue-500" />
@@ -58,11 +97,11 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm p-6 border">
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-gray-500">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-gray-600">Total Orders</p>
-                                <p className="text-3xl font-bold text-gray-800">1,429</p>
+                                <p className="text-3xl font-bold text-gray-800">{allOrders?.length}</p>
                             </div>
                             <div className="bg-green-50 p-3 rounded-lg">
                                 <ShoppingCart className="h-8 w-8 text-green-500" />
@@ -74,11 +113,11 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm p-6 border">
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-gray-500">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-gray-600">Revenue</p>
-                                <p className="text-3xl font-bold text-gray-800">₹3,47,280</p>
+                                <p className="text-3xl font-bold text-gray-800">₹{revenue}</p>
                             </div>
                             <div className="bg-orange-50 p-3 rounded-lg">
                                 <BarChart3 className="h-8 w-8 text-orange-500" />
@@ -90,11 +129,11 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm p-6 border">
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-gray-500">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-gray-600">Avg Rating</p>
-                                <p className="text-3xl font-bold text-gray-800">4.8</p>
+                                <p className="text-3xl font-bold text-gray-800">{avgRating}</p>
                             </div>
                             <div className="bg-yellow-50 p-3 rounded-lg">
                                 <Star className="h-8 w-8 text-yellow-500" />
@@ -108,8 +147,8 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Recent Orders Table */}
-                <div className="bg-white rounded-xl shadow-sm border">
-                    <div className="px-6 py-4 border-b">
+                <div className="bg-white rounded-xl shadow-sm border-gray-500">
+                    <div className="px-6 py-4 border-gray-500-b">
                         <h2 className="text-lg font-semibold text-gray-800">Recent Orders</h2>
                     </div>
                     <div className="overflow-x-auto">
@@ -125,36 +164,25 @@ const AdminDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-001</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Rahul Sharma</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Dal Bati Churma</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹180</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Delivered</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">2 hours ago</td>
-                                </tr>
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-002</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Priya Gupta</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Poha Jalebi Combo</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹120</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Preparing</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">15 minutes ago</td>
-                                </tr>
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-003</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Amit Patel</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Indori Special Thali</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹250</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">On the way</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">30 minutes ago</td>
-                                </tr>
+
+                                {
+                                    allOrders.map(order => {
+                                        return (
+                                            <tr className="hover:bg-gray-50">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order._id}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{order.user.name}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{order.meal.name}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹{order.meal.price}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${order.status === "pending" ? "bg-yellow-100 text-yellow-800" : order.status === "delivered" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{order.status}</span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{new Date(order.createdAt).toLocaleDateString('en-IN')}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+
+
                             </tbody>
                         </table>
                     </div>

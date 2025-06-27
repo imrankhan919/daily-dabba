@@ -59,12 +59,7 @@ const Loader = () => {
                     <div className="w-3 h-3 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                 </div>
 
-                {/* Loading text */}
-                <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 text-center">
-                    <p className="text-orange-700 font-semibold text-lg animate-pulse">
-                        Preparing your delicious meal...
-                    </p>
-                </div>
+
             </div>
 
             <style jsx>{`

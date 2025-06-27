@@ -91,7 +91,7 @@ const Navbar = () => {
                                 <ShoppingCart className="h-6 w-6 text-gray-700" />
                                 <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
                             </Link>
-                            <Link to={"/my-profile"} className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                            <Link to={user.isAdmin ? "/admin" : "/my-profile"} className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
                                 <span className="text-white font-semibold text-sm">{user?.name[0]}</span>
                             </Link>
                             <button onClick={handleLogout} className="cursor-pointer text-gray-700 hover:bg-red-800 font-medium bg-red-500 rounded-full py-2 px-4 text-white">Logout</button>
