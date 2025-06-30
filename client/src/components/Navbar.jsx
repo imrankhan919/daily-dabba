@@ -37,30 +37,30 @@ const Navbar = () => {
 
                 <nav className="mt-8">
                     <div className="px-4 space-y-2">
-                        <a href="#" className={location.pathname === "/admin" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
+                        <Link to="/admin" className={location.pathname === "/admin" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
                             <BarChart3 className="h-5 w-5 mr-3" />
                             Dashboard
-                        </a>
-                        <a href="#" className={location.pathname === "/admin/users" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
+                        </Link>
+                        <Link to="/admin/users" className={location.pathname === "/admin/users" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
                             <Users className="h-5 w-5 mr-3" />
                             Users
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        </Link>
+                        <Link to="/admin/meals" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <UtensilsCrossed className="h-5 w-5 mr-3" />
                             Meals
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        </Link>
+                        <Link to="/admin/orders" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <ShoppingCart className="h-5 w-5 mr-3" />
                             Orders
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        </Link>
+                        <Link to="/admin/ratings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <Star className="h-5 w-5 mr-3" />
                             Ratings
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        </Link>
+                        <Link href="/admin/settings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <Settings className="h-5 w-5 mr-3" />
                             Settings
-                        </a>
+                        </Link>
                     </div>
                 </nav>
             </div>

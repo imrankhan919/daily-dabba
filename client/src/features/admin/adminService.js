@@ -31,12 +31,23 @@ const fetchAllRatings = async (token) => {
     return response.data
 }
 
+const fetchAllMeals = async (token) => {
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.get("/api/meal", options)
+    return response.data
+}
+
 
 
 const adminService = {
     fetchAllUsers,
     fetchAllOrders,
-    fetchAllRatings
+    fetchAllRatings,
+    fetchAllMeals
 }
 
 
