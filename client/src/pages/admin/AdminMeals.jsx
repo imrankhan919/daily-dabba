@@ -9,25 +9,35 @@ import {
     Trash2,
     Eye
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllMeals } from '../../features/admin/adminSlice';
+import { getAllMeals, removeMeal } from '../../features/admin/adminSlice';
 import Loader from '../../components/Loader';
+import MealModal from '../../components/admin/MealModal';
 
 
 const AdminMeals = () => {
 
-    const { allMeals, adminLoading, allOrders, adminSuccess, adminError, adminErrorMessage } = useSelector(state => state.admin)
+    const { allMeals, adminLoading, allRatings, allOrders, adminSuccess, adminError, adminErrorMessage } = useSelector(state => state.admin)
     const dispatch = useDispatch()
 
-    const bestSeller =
+    // Average Rating
+    const avgRating = allRatings.reduce((p, c) => p + c.rating / allRatings.length, 0)
+
+
+    // Remove Meal
+    const removeThisMeal = (id) => {
+        dispatch(removeMeal(id))
+    }
 
 
 
-        useEffect(() => {
-            dispatch(getAllMeals())
-        }, [])
+    const bestSeller = null
+
+    useEffect(() => {
+        dispatch(getAllMeals())
+    }, [])
 
 
     if (adminLoading) {
@@ -65,6 +75,8 @@ const AdminMeals = () => {
                     </div>
                 </div>
             </header>
+
+            {/* <MealModal /> */}
 
             {/* Meals Content */}
             <main className="p-6">
@@ -110,7 +122,7 @@ const AdminMeals = () => {
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-gray-600">Avg Rating</p>
-                                <p className="text-3xl font-bold text-gray-800">4.6</p>
+                                <p className="text-3xl font-bold text-gray-800">{avgRating}</p>
                             </div>
                             <div className="bg-orange-50 p-3 rounded-lg">
                                 <Star className="h-8 w-8 text-orange-500" />
@@ -118,6 +130,9 @@ const AdminMeals = () => {
                         </div>
                     </div>
                 </div>
+
+
+
 
                 {/* Meals Grid */}
                 <div className="bg-white rounded-xl shadow-sm border-gray-500">
@@ -137,6 +152,8 @@ const AdminMeals = () => {
                             </select>
                         </div>
                     </div>
+
+
 
                     <div className="p-6">
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,7 +185,7 @@ const AdminMeals = () => {
                                                         <button className="p-2 text-green-600 hover:bg-green-50 rounded">
                                                             <Edit className="h-4 w-4" />
                                                         </button>
-                                                        <button className="p-2 text-red-600 hover:bg-red-50 rounded">
+                                                        <button onClick={() => removeThisMeal(meal._id)} className="p-2 text-red-600 hover:bg-red-50 rounded">
                                                             <Trash2 className="h-4 w-4" />
                                                         </button>
                                                     </div>

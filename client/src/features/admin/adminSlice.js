@@ -84,6 +84,23 @@ const adminSlice = createSlice({
                 state.adminError = true
                 state.adminErrorMessage = action.payload
             })
+            .addCase(removeMeal.pending, (state, action) => {
+                state.adminLoading = true
+                state.adminSuccess = false
+                state.adminError = false
+            })
+            .addCase(removeMeal.fulfilled, (state, action) => {
+                state.adminLoading = false
+                state.adminSuccess = true
+                state.allMeals = state.allMeals.filter(meal => meal._id !== action.payload._id)
+                state.adminError = false
+            })
+            .addCase(removeMeal.rejected, (state, action) => {
+                state.adminLoading = false
+                state.adminSuccess = false
+                state.adminError = true
+                state.adminErrorMessage = action.payload
+            })
     }
 })
 
@@ -132,6 +149,18 @@ export const getAllMeals = createAsyncThunk("ADMIN/FETCH/MEALS", async (_, thunk
     let token = thunkAPI.getState().auth.user.token
     try {
         return await adminService.fetchAllMeals(token)
+    } catch (error) {
+        const message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+    }
+
+})
+
+// Remove meal
+export const removeMeal = createAsyncThunk("ADMIN/REMOVE/MEALS", async (id, thunkAPI) => {
+    let token = thunkAPI.getState().auth.user.token
+    try {
+        return await adminService.deleteMeal(id, token)
     } catch (error) {
         const message = error.response.data.message
         return thunkAPI.rejectWithValue(message)

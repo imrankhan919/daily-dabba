@@ -21,6 +21,11 @@ const mealSchema = new mongoose.Schema({
         type: Number,
         default: 10,
         required: true
+    },
+    isActive: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 }, {
     timestamps: true

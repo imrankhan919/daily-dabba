@@ -43,11 +43,25 @@ const fetchAllMeals = async (token) => {
 
 
 
+// Remove Meal
+const deleteMeal = async (id, token) => {
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.delete(`/api/admin/remove-meal/${id}`, options)
+    return response.data
+}
+
+
+
 const adminService = {
     fetchAllUsers,
     fetchAllOrders,
     fetchAllRatings,
-    fetchAllMeals
+    fetchAllMeals,
+    deleteMeal
 }
 
 
