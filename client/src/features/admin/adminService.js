@@ -55,13 +55,42 @@ const deleteMeal = async (id, token) => {
 }
 
 
+// Add Meal
+const createMeal = async (formData, token) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.post('/api/admin/add-meal', formData, options)
+    return response.data
+}
+
+// Update Meal
+const updateMeal = async (updatedMeal, token) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.put('/api/admin/update-meal/' + updatedMeal._id, updatedMeal, options)
+    console.log(response.data)
+    return response.data
+}
+
+
+
 
 const adminService = {
     fetchAllUsers,
     fetchAllOrders,
     fetchAllRatings,
     fetchAllMeals,
-    deleteMeal
+    deleteMeal,
+    createMeal,
+    updateMeal
 }
 
 
