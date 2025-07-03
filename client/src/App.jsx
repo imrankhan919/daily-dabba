@@ -15,6 +15,7 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminMeals from './pages/admin/AdminMeals'
 import AdminRating from './pages/admin/AdminRating'
 import Meals from './pages/Meals'
+import AdminOrders from './pages/admin/AdminOrders'
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route path='/admin' element={<AdminDashboard />} />
           <Route path='/admin/users' element={<AdminUsers />} />
           <Route path='/admin/meals' element={<AdminMeals />} />
+          <Route path='/admin/orders' element={<AdminOrders />} />
           <Route path='/admin/ratings' element={<AdminRating />} />
         </Routes>
         <Footer />

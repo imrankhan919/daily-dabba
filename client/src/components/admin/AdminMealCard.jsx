@@ -7,9 +7,10 @@ import {
     Plus,
     Edit,
     Trash2,
-    Eye
+    Eye,
 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom"
 import { mealEdit } from '../../features/admin/adminSlice';
 
 const AdminMealCard = ({ meal, handleModal }) => {
@@ -42,9 +43,9 @@ const AdminMealCard = ({ meal, handleModal }) => {
                 <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Orders: 1,247</span>
                     <div className="flex items-center space-x-2">
-                        <button className="p-2 text-blue-600 hover:bg-blue-50 rounded">
+                        <Link to={`/meal/${meal._id}`} className="p-2 text-blue-600 hover:bg-blue-50 rounded">
                             <Eye className="h-4 w-4" />
-                        </button>
+                        </Link>
                         <button onClick={handleEdit} className="p-2 text-green-600 hover:bg-green-50 rounded">
                             <Edit className="h-4 w-4" />
                         </button>

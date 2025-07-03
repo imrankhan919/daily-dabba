@@ -24,17 +24,17 @@ const ViewMeal = () => {
                         <img
                             src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=200"
                             alt="Dal Bati Churma"
-                            className="w-full h-24 object-cover rounded-lg border-2 border-orange-500"
+                            className="w-full h-24 object-cover rounded-lg border-gray-400-2 border-gray-400-orange-500"
                         />
                         <img
                             src="https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=200"
                             alt="Dal Bati Churma"
-                            className="w-full h-24 object-cover rounded-lg hover:border-2 hover:border-orange-500 cursor-pointer"
+                            className="w-full h-24 object-cover rounded-lg hover:border-gray-400-2 hover:border-gray-400-orange-500 cursor-pointer"
                         />
                         <img
                             src="https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=200"
                             alt="Dal Bati Churma"
-                            className="w-full h-24 object-cover rounded-lg hover:border-2 hover:border-orange-500 cursor-pointer"
+                            className="w-full h-24 object-cover rounded-lg hover:border-gray-400-2 hover:border-gray-400-orange-500 cursor-pointer"
                         />
                     </div>
                 </div>
@@ -56,7 +56,7 @@ const ViewMeal = () => {
                         <p className="text-3xl font-bold text-orange-500 mb-6">₹180</p>
                     </div>
 
-                    <div className="bg-white rounded-xl p-6 shadow-sm border">
+                    <div className="bg-white rounded-xl p-6 shadow-sm border-gray-400">
                         <h3 className="text-lg font-semibold text-gray-800 mb-3">Description</h3>
                         <p className="text-gray-600 leading-relaxed">
                             Experience the authentic taste of Indore with our traditional Dal Bati Churma. This iconic dish features
@@ -66,7 +66,7 @@ const ViewMeal = () => {
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-xl p-6 shadow-sm border">
+                    <div className="bg-white rounded-xl p-6 shadow-sm border-gray-400">
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">Meal Info</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="flex items-center space-x-3">
@@ -86,7 +86,7 @@ const ViewMeal = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl p-6 shadow-sm border">
+                    <div className="bg-white rounded-xl p-6 shadow-sm border-gray-400">
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">Ingredients</h3>
                         <div className="grid grid-cols-2 gap-2">
                             <span className="text-gray-600">• Wheat flour</span>
@@ -99,11 +99,11 @@ const ViewMeal = () => {
                     </div>
 
                     {/* Quantity and Order */}
-                    <div className="bg-white rounded-xl p-6 shadow-sm border">
+                    <div className="bg-white rounded-xl p-6 shadow-sm border-gray-400">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-semibold text-gray-800">Quantity</h3>
                             <div className="flex items-center space-x-4">
-                                <button className="w-10 h-10 rounded-full border-2 border-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition duration-200">
+                                <button className="w-10 h-10 rounded-full border-gray-400-2 border-gray-400-orange-500 flex items-center justify-center text-orange-500 hover:bg-orange-500 hover:text-white transition duration-200">
                                     <Minus className="h-4 w-4" />
                                 </button>
                                 <span className="text-xl font-semibold text-gray-800 w-8 text-center">1</span>
@@ -117,7 +117,7 @@ const ViewMeal = () => {
                             <button className="w-full bg-orange-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-600 transform hover:scale-105 transition duration-300 shadow-lg">
                                 Add to Cart - ₹180
                             </button>
-                            <button className="w-full border-2 border-orange-500 text-orange-500 py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-50 transition duration-300">
+                            <button className="w-full border-gray-400-2 border-gray-400-orange-500 text-orange-500 py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-50 transition duration-300">
                                 Order Now
                             </button>
                         </div>
@@ -127,8 +127,8 @@ const ViewMeal = () => {
 
             {/* Reviews Section */}
             <div className="mt-16">
-                <div className="bg-white rounded-xl shadow-sm border">
-                    <div className="px-6 py-4 border-b">
+                <div className="bg-white rounded-xl shadow-sm border-gray-400">
+                    <div className="px-6 py-4 border-gray-400-b">
                         <h2 className="text-2xl font-bold text-gray-800">Customer Reviews</h2>
                     </div>
 

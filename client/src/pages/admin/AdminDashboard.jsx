@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     const revenue = allOrders.filter(order => order.status !== "cancelled").reduce((p, c) => p + c.meal.price, 0)
 
     // Average Rating
-    const avgRating = allRatings.reduce((p, c) => p + c.rating / allRatings.length, 0)
+    const avgRating = allRatings.reduce((p, c) => p + c.rating / allRatings.length, 0).toFixed(2)
 
     useEffect(() => {
 
