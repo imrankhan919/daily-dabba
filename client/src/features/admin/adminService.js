@@ -76,9 +76,25 @@ const updateMeal = async (updatedMeal, token) => {
         }
     }
     const response = await axios.put('/api/admin/update-meal/' + updatedMeal._id, updatedMeal, options)
-    console.log(response.data)
     return response.data
 }
+
+// Update Order
+const updateOrder = async (orderUpdate, token) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.put('/api/admin/update-order/' + orderUpdate._id, { status: orderUpdate.status }, options)
+    console.log(response.data)
+    console.log(response.data._id)
+    return response.data
+}
+
+
+
 
 
 
@@ -90,7 +106,8 @@ const adminService = {
     fetchAllMeals,
     deleteMeal,
     createMeal,
-    updateMeal
+    updateMeal,
+    updateOrder
 }
 
 

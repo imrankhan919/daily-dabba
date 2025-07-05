@@ -31,13 +31,14 @@ const AdminMeals = () => {
 
 
     // Average Rating
-    const avgRating = allRatings.reduce((p, c) => p + c.rating / allRatings.length, 0)
+    const avgRating = allRatings.reduce((p, c) => p + c.rating / allRatings.length, 0).toFixed(2)
 
 
     // Remove Meal
     const removeThisMeal = (id) => {
         dispatch(removeMeal(id))
     }
+
 
 
 

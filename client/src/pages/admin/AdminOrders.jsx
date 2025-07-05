@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Search, Plus, Bell, BarChart3, Users, Utensils, ShoppingCart, Star, Settings, Edit, Trash2, Package, Clock, CheckCircle, XCircle, ChevronDown } from 'lucide-react';
+import { Search, Plus, Bell, BarChart3, Users, Utensils, ShoppingCart, Star, Settings, Edit, Trash2, Package, Clock, CheckCircle, XCircle, ChevronDown, X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllOrders } from '../../features/admin/adminSlice';
+import { getAllOrders, updateTheOrder } from '../../features/admin/adminSlice';
 
 function AdminOrders() {
 
@@ -10,11 +10,8 @@ function AdminOrders() {
     const { users, allOrders, allRatings, adminLoading, adminSuccess, adminError, adminErrorMessage } = useSelector(state => state.admin)
 
 
-
     const updateOrderStatus = (orderId, newStatus) => {
-        setOrders(orders.map(order =>
-            order.id === orderId ? { ...order, status: newStatus } : order
-        ));
+        dispatch(updateTheOrder({ _id: orderId, status: newStatus }))
     };
 
     const getStatusColor = (status) => {
@@ -36,7 +33,7 @@ function AdminOrders() {
 
 
 
-    }, [allOrders])
+    }, [])
 
 
 
@@ -77,7 +74,7 @@ function AdminOrders() {
 
             {/* Stats Cards */}
             <div className="p-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -98,6 +95,17 @@ function AdminOrders() {
                             </div>
                             <div className="p-3 bg-yellow-50 rounded-full">
                                 <Clock className="w-6 h-6 text-yellow-600" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-gray-600 mb-1">Cancelled Orders</p>
+                                <p className="text-3xl font-bold text-gray-900">{allOrders.filter(item => item.status === "cancelled").length}</p>
+                            </div>
+                            <div className="p-3 bg-yellow-50 rounded-full">
+                                <X className="w-6 h-6 text-red-600" />
                             </div>
                         </div>
                     </div>
@@ -182,13 +190,12 @@ function AdminOrders() {
                                             <div className="relative">
                                                 <select
                                                     value={order.status}
-                                                    onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                                                    onChange={(e) => updateOrderStatus(order._id, e.target.value)}
                                                     className={`px-3 py-1 rounded-full text-xs font-medium border-none focus:ring-2 focus:ring-orange-500 cursor-pointer ${getStatusColor(order.status)}`}
                                                 >
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Processing">Processing</option>
-                                                    <option value="Completed">Completed</option>
-                                                    <option value="Cancelled">Cancelled</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="delivered">Delivered</option>
+                                                    <option value="cancelled">Cancelled</option>
                                                 </select>
                                             </div>
                                         </td>

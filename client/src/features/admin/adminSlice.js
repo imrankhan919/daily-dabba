@@ -150,6 +150,23 @@ const adminSlice = createSlice({
                 state.adminError = true
                 state.adminErrorMessage = action.payload
             })
+            .addCase(updateTheOrder.pending, (state, action) => {
+                state.adminLoading = true
+                state.adminSuccess = false
+                state.adminError = false
+            })
+            .addCase(updateTheOrder.fulfilled, (state, action) => {
+                state.adminLoading = false
+                state.adminSuccess = true
+                state.allOrders = state.allOrders.map(item => item._id === action.payload._id ? action.payload : item)
+                state.adminError = false
+            })
+            .addCase(updateTheOrder.rejected, (state, action) => {
+                state.adminLoading = false
+                state.adminSuccess = false
+                state.adminError = true
+                state.adminErrorMessage = action.payload
+            })
     }
 })
 
@@ -234,6 +251,17 @@ export const updateTheMeal = createAsyncThunk("ADMIN/UDPATE/MEAL", async (update
     let token = thunkAPI.getState().auth.user.token
     try {
         return await adminService.updateMeal(updatedMeal, token)
+    } catch (error) {
+        const message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// Update Order
+export const updateTheOrder = createAsyncThunk("ADMIN/UDPATE/ORDER", async (orderUpdate, thunkAPI) => {
+    let token = thunkAPI.getState().auth.user.token
+    try {
+        return await adminService.updateOrder(orderUpdate, token)
     } catch (error) {
         const message = error.response.data.message
         return thunkAPI.rejectWithValue(message)
