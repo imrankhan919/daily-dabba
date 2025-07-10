@@ -1,23 +1,28 @@
 import { ShoppingBag, Star, Clock, Users, ArrowLeft, Plus, Minus, ShoppingCart } from 'lucide-react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getMeal } from '../features/meals/MealSlice';
 import Loader from '../components/Loader';
+import { getRatings } from '../features/ratings/ratingSlice';
 
 const ViewMeal = () => {
 
     const { meal, mealSuccess, mealLoading, mealError, mealErrorMessage } = useSelector(state => state.meal)
+    const { ratings, ratingSuccess, ratingLoading, ratingError, ratingErrorMessage } = useSelector(state => state.rating)
 
     const { id } = useParams()
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getMeal(id))
+        if (mealSuccess) {
+            dispatch(getRatings(id))
+        }
     }, [])
 
 
-    if (mealLoading) {
+    if (mealLoading || ratingLoading) {
         return <Loader />
     }
 
@@ -25,10 +30,10 @@ const ViewMeal = () => {
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Back Button */}
-            <button className="flex items-center text-gray-600 hover:text-orange-500 mb-6">
+            <Link to={"/meals"} className="flex items-center text-gray-600 hover:text-orange-500 mb-6">
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Back to Meals
-            </button>
+            </Link>
 
             <div className="grid lg:grid-cols-2 gap-12">
                 {/* Meal Image */}
@@ -48,12 +53,12 @@ const ViewMeal = () => {
                         <h1 className="text-4xl font-bold text-gray-800 mb-2">{meal.name}</h1>
                         <div className="flex items-center space-x-4 mb-4">
                             <div className="flex items-center">
-                                {[1, 2, 3, 4, 5].map((star) => (
+                                {Array.from({ length: meal.rating.reduce((p, c) => p + c.rating / meal.rating.length, 0) }, (_, i) => i + 1).map((star) => (
                                     <Star key={star} className="h-5 w-5 text-yellow-400 fill-current" />
                                 ))}
                                 <span className="text-gray-600 ml-2"></span>
                             </div>
-                            <span className="text-gray-400">•</span>
+                            <span className="text-gray-400">{meal.rating.length}•</span>
                             <span className="text-gray-600"> reviews</span>
                         </div>
                         <p className="text-3xl font-bold text-orange-500 mb-6">₹{meal.price}</p>
@@ -106,31 +111,36 @@ const ViewMeal = () => {
 
                     <div className="p-6 space-y-6">
 
-                        {/* {
-                            meal.rating.map(item => {
-                                return (
-                                    <div className="flex items-start space-x-4">
-                                        <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
-                                            <span className="text-white font-semibold">{item.user.name[0]}</span>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex items-center justify-between mb-2">
-                                                <h3 className="font-semibold text-gray-800">Rahul Sharma</h3>
-                                                <div className="flex items-center">
-                                                    {[1, 2, 3, 4, 5].map((star) => (
-                                                        <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                                                    ))}
-                                                </div>
+                        {
+                            ratings.length === 0 ? (<>
+                                <h2 className="text-2xl font-bold text-gray-800">No Ratings Yet</h2>
+
+                            </>) : (
+                                ratings.map(item => {
+                                    return (
+                                        <div className="flex items-start space-x-4">
+                                            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                                                <span className="text-white font-semibold">{item.user.name[0]}</span>
                                             </div>
-                                            <p className="text-gray-600">
-                                                {item.text}
-                                            </p>
-                                            <p className="text-sm text-gray-500 mt-2">{new Date(item.createdAt).toDateString('en-IN')}</p>
+                                            <div className="flex-1">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <h3 className="font-semibold text-gray-800">{item.user.name}</h3>
+                                                    <div className="flex items-center">
+                                                        {Array.from({ length: item.rating }, (_, i) => i + 1).map((star) => (
+                                                            <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <p className="text-gray-600">
+                                                    {item.text}
+                                                </p>
+                                                <p className="text-sm text-gray-500 mt-2">{new Date(item.createdAt).toDateString('en-IN')}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                )
-                            })
-                        } */}
+                                    )
+                                })
+                            )
+                        }
 
                     </div>
                 </div>

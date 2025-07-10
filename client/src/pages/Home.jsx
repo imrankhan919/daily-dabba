@@ -1,7 +1,28 @@
 import { Clock, Star } from 'lucide-react'
 import FeaturedCard from '../components/FeaturedCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getMeals } from '../features/meals/MealSlice'
+import Loader from '../components/Loader'
 
 const Home = () => {
+
+    const { meals, mealSuccess, mealLoading, mealError, mealErrorMessage } = useSelector(state => state.meal)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getMeals())
+    }, [])
+
+
+    if (mealLoading) {
+        return <Loader />
+    }
+
+
+
+
     return (
         <>
             <section className="bg-gradient-to-br from-yellow-50 via-orange-50 to-rose-50 py-20">
@@ -23,9 +44,9 @@ const Home = () => {
                     <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Featured Meals</h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
+                        {
+                            meals.map(meal => <FeaturedCard key={meal._id} meal={meal} />)
+                        }
 
                     </div>
                 </div>

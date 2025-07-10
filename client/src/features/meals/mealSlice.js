@@ -32,6 +32,23 @@ const mealSlice = createSlice({
                 state.mealError = true
                 state.mealErrorMessage = action.payload
             })
+            .addCase(getMeals.pending, (state, action) => {
+                state.mealLoading = true
+                state.mealSuccess = false
+                state.mealError = false
+            })
+            .addCase(getMeals.fulfilled, (state, action) => {
+                state.mealLoading = false
+                state.mealSuccess = true
+                state.meals = action.payload
+                state.mealError = false
+            })
+            .addCase(getMeals.rejected, (state, action) => {
+                state.mealLoading = false
+                state.mealSuccess = false
+                state.mealError = true
+                state.mealErrorMessage = action.payload
+            })
     }
 })
 
@@ -44,6 +61,16 @@ export default mealSlice.reducer
 export const getMeal = createAsyncThunk("FETCH/MEAL", async (mid, thunkAPI) => {
     try {
         return await mealService.fetchMeal(mid)
+    } catch (error) {
+        const message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// GET MEALS
+export const getMeals = createAsyncThunk("FETCH/MEALS", async (_, thunkAPI) => {
+    try {
+        return await mealService.fetchMeals()
     } catch (error) {
         const message = error.response.data.message
         return thunkAPI.rejectWithValue(message)

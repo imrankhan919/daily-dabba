@@ -5,7 +5,15 @@ const fetchMeal = async (mid) => {
     return response.data
 }
 
-const mealService = { fetchMeal }
+const fetchMeals = async () => {
+    const response = await axios.get('/api/meal')
+    return response.data
+}
+
+
+
+
+const mealService = { fetchMeal, fetchMeals }
 
 
 export default mealService
