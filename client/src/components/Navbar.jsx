@@ -37,27 +37,27 @@ const Navbar = () => {
 
                 <nav className="mt-8">
                     <div className="px-4 space-y-2">
-                        <Link to="/admin" className={location.pathname === "/admin" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
+                        <Link to="/auth/admin" className={location.pathname === "/admin" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
                             <BarChart3 className="h-5 w-5 mr-3" />
                             Dashboard
                         </Link>
-                        <Link to="/admin/users" className={location.pathname === "/admin/users" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
+                        <Link to="/auth/admin/users" className={location.pathname === "/admin/users" ? "flex items-center px-4 py-3 text-gray-700 bg-orange-50 rounded-lg" : "flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 rounded-lg"}>
                             <Users className="h-5 w-5 mr-3" />
                             Users
                         </Link>
-                        <Link to="/admin/meals" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <Link to="/auth/admin/meals" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <UtensilsCrossed className="h-5 w-5 mr-3" />
                             Meals
                         </Link>
-                        <Link to="/admin/orders" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <Link to="/auth/admin/orders" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <ShoppingCart className="h-5 w-5 mr-3" />
                             Orders
                         </Link>
-                        <Link to="/admin/ratings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <Link to="/auth/admin/ratings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <Star className="h-5 w-5 mr-3" />
                             Ratings
                         </Link>
-                        <Link href="/admin/settings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <Link href="/auth/admin/settings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
                             <Settings className="h-5 w-5 mr-3" />
                             Settings
                         </Link>
@@ -91,7 +91,7 @@ const Navbar = () => {
                                 <ShoppingCart className="h-6 w-6 text-gray-700" />
                                 <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
                             </Link>
-                            <Link to={user.isAdmin ? "/admin" : "/my-profile"} className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                            <Link to={user.isAdmin ? "auth/admin" : "auth/my-profile"} className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
                                 <span className="text-white font-semibold text-sm">{user?.name[0]}</span>
                             </Link>
                             <button onClick={handleLogout} className="cursor-pointer text-gray-700 hover:bg-red-800 font-medium bg-red-500 rounded-full py-2 px-4 text-white">Logout</button>

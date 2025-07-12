@@ -1,5 +1,6 @@
 const Meal = require("../models/mealModel")
 const Rating = require("../models/ratingModel")
+const userModel = require("../models/userModel")
 const User = require("../models/userModel")
 
 const addRating = async (req, res) => {
@@ -35,7 +36,17 @@ const addRating = async (req, res) => {
         throw new Error('Rating Not Created')
     }
 
-    res.status(201).json(newRating)
+    const ratingData = {
+        _id: newRating.id,
+        rating: newRating.rating,
+        text: newRating.text,
+        user: user,
+        meal: meal,
+        createdAt: newRating.createdAt
+    }
+
+
+    res.status(201).json(ratingData)
 
 }
 

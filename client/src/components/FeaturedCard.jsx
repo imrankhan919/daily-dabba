@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const FeaturedCard = ({ meal }) => {
     return (
-        <Link to={`/meal/${meal._id}`}>
+        <Link to={`/auth/meal/${meal._id}`}>
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
                 <img src={meal.image} alt={meal.name} className="w-full h-48 object-cover" />
                 <div className="p-6">

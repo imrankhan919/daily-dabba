@@ -60,7 +60,8 @@ const registerUser = async (req, res) => {
         email: user.email,
         phone: user.phone,
         isAdmin: user.isAdmin,
-        token: generatToken(user._id)
+        token: generatToken(user._id),
+        createdAt: user.createdAt
     })
 
 }
@@ -84,7 +85,8 @@ const loginUser = async (req, res) => {
             email: user.email,
             phone: user.phone,
             isAdmin: user.isAdmin,
-            token: generatToken(user._id)
+            token: generatToken(user._id),
+            createdAt: user.createdAt
         })
     } else {
         res.status(400)

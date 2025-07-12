@@ -1,7 +1,13 @@
 import { ShoppingBag, User, MapPin, Phone, Mail, Edit, Package, Star, Clock, CreditCard } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 
 const Profile = () => {
+
+    const { user } = useSelector(state => state.auth)
+
+
+
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="grid lg:grid-cols-3 gap-8">
@@ -11,10 +17,10 @@ const Profile = () => {
                     <div className="bg-white rounded-xl shadow-sm border p-6">
                         <div className="text-center">
                             <div className="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-white font-bold text-2xl">RS</span>
+                                <span className="text-white font-bold text-2xl">{user.name[0]}</span>
                             </div>
-                            <h2 className="text-xl font-bold text-gray-800">Rahul Sharma</h2>
-                            <p className="text-gray-600">Customer since Jan 2024</p>
+                            <h2 className="text-xl font-bold text-gray-800">{user.name}</h2>
+                            <p className="text-gray-600">Customer since {new Date(user.createdAt).toLocaleDateString('en-IN')}</p>
                             <button className="mt-4 flex items-center space-x-2 text-orange-500 hover:text-orange-600 mx-auto">
                                 <Edit className="h-4 w-4" />
                                 <span>Edit Profile</span>
@@ -67,7 +73,7 @@ const Profile = () => {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                                     <User className="h-5 w-5 text-gray-400" />
-                                    <span className="text-gray-800">Rahul Sharma</span>
+                                    <span className="text-gray-800">{user.name}</span>
                                 </div>
                             </div>
 
@@ -75,7 +81,7 @@ const Profile = () => {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                                     <Mail className="h-5 w-5 text-gray-400" />
-                                    <span className="text-gray-800">rahul.sharma@email.com</span>
+                                    <span className="text-gray-800">{user.email}</span>
                                 </div>
                             </div>
 
@@ -83,7 +89,7 @@ const Profile = () => {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                                     <Phone className="h-5 w-5 text-gray-400" />
-                                    <span className="text-gray-800">+91 98765 43210</span>
+                                    <span className="text-gray-800">+91 {user.phone}</span>
                                 </div>
                             </div>
 

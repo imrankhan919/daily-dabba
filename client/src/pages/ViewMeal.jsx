@@ -4,21 +4,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getMeal } from '../features/meals/MealSlice';
 import Loader from '../components/Loader';
-import { getRatings } from '../features/ratings/ratingSlice';
+import { addRating, getRatings } from '../features/ratings/ratingSlice';
+import { useState } from 'react';
 
 const ViewMeal = () => {
-
-    const { meal, mealSuccess, mealLoading, mealError, mealErrorMessage } = useSelector(state => state.meal)
-    const { ratings, ratingSuccess, ratingLoading, ratingError, ratingErrorMessage } = useSelector(state => state.rating)
 
     const { id } = useParams()
     const dispatch = useDispatch()
 
+    const { meal, mealSuccess, mealLoading, mealError, mealErrorMessage } = useSelector(state => state.meal)
+    const { ratings, ratingSuccess, ratingLoading, ratingError, ratingErrorMessage } = useSelector(state => state.rating)
+
+    const [rating, setRating] = useState(1)
+    const [review, setReview] = useState("")
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        dispatch(addRating({ rating, text: review, mid: id }))
+        setRating("")
+        setReview("")
+    }
+
+
+
+
     useEffect(() => {
         dispatch(getMeal(id))
-        if (mealSuccess) {
-            dispatch(getRatings(id))
-        }
+        dispatch(getRatings(id))
+
     }, [])
 
 
@@ -53,12 +66,12 @@ const ViewMeal = () => {
                         <h1 className="text-4xl font-bold text-gray-800 mb-2">{meal.name}</h1>
                         <div className="flex items-center space-x-4 mb-4">
                             <div className="flex items-center">
-                                {Array.from({ length: meal.rating.reduce((p, c) => p + c.rating / meal.rating.length, 0) }, (_, i) => i + 1).map((star) => (
+                                {Array.from({ length: ratings.reduce((p, c) => p + c.rating / meal.rating.length, 0) }, (_, i) => i + 1).map((star) => (
                                     <Star key={star} className="h-5 w-5 text-yellow-400 fill-current" />
                                 ))}
                                 <span className="text-gray-600 ml-2"></span>
                             </div>
-                            <span className="text-gray-400">{meal.rating.length}•</span>
+                            <span className="text-gray-400">{ratings.length}•</span>
                             <span className="text-gray-600"> reviews</span>
                         </div>
                         <p className="text-3xl font-bold text-orange-500 mb-6">₹{meal.price}</p>
@@ -110,6 +123,18 @@ const ViewMeal = () => {
                     </div>
 
                     <div className="p-6 space-y-6">
+                        <h1 className="text-lg font-bold text-gray-800">Add Your Review</h1>
+                        <form onSubmit={handleSubmit} className='mb-16 border border-gray-300 p-4 rounded-md'>
+                            <select value={rating} onChange={e => setRating(e.target.value)} className='w-full border border-gray-200 p-2 rounded-md'>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <textarea value={review} onChange={e => setReview(e.target.value)} placeholder='Enter Your Review' className='w-full border border-gray-200 my-2 rounded-md p-4'></textarea>
+                            <button type='submit' className='bg-orange-500 w-full py-2 rounded-md text-white font-semibold cursor-pointer hover:bg-orange-800'>Submit Review</button>
+                        </form>
 
                         {
                             ratings.length === 0 ? (<>
