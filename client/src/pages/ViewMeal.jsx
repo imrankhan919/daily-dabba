@@ -1,16 +1,18 @@
 import { ShoppingBag, Star, Clock, Users, ArrowLeft, Plus, Minus, ShoppingCart } from 'lucide-react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getMeal } from '../features/meals/MealSlice';
 import Loader from '../components/Loader';
 import { addRating, getRatings } from '../features/ratings/ratingSlice';
 import { useState } from 'react';
+import { addToCart } from '../features/orders/orderSlice';
 
 const ViewMeal = () => {
 
     const { id } = useParams()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const { meal, mealSuccess, mealLoading, mealError, mealErrorMessage } = useSelector(state => state.meal)
     const { ratings, ratingSuccess, ratingLoading, ratingError, ratingErrorMessage } = useSelector(state => state.rating)
@@ -18,14 +20,20 @@ const ViewMeal = () => {
     const [rating, setRating] = useState(1)
     const [review, setReview] = useState("")
 
+
+    // Add to cart
+    const handleAddToCart = (meal) => {
+        dispatch(addToCart(meal))
+        navigate("/auth/cart")
+    }
+
+
     const handleSubmit = (e) => {
         e.preventDefault()
         dispatch(addRating({ rating, text: review, mid: id }))
         setRating("")
         setReview("")
     }
-
-
 
 
     useEffect(() => {
@@ -107,7 +115,7 @@ const ViewMeal = () => {
                     {/* Quantity and Order */}
                     <div className="bg-white rounded-xl p-6 shadow-sm border-gray-400">
                         <div className="space-y-3">
-                            <button className="w-full bg-orange-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-600 transform hover:scale-105 transition duration-300 shadow-lg">
+                            <button onClick={() => handleAddToCart(meal)} className="w-full bg-orange-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-600 transform hover:scale-105 transition duration-300 shadow-lg">
                                 Order Now - ₹{meal.price}
                             </button>
                         </div>
@@ -143,7 +151,7 @@ const ViewMeal = () => {
                             </>) : (
                                 ratings.map(item => {
                                     return (
-                                        <div className="flex items-start space-x-4">
+                                        <div key={item._id} className="flex items-start space-x-4">
                                             <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
                                                 <span className="text-white font-semibold">{item.user.name[0]}</span>
                                             </div>

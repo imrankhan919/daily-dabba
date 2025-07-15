@@ -1,7 +1,30 @@
 import { ShoppingBag, MapPin, Clock, CreditCard, Wallet, Truck, ArrowLeft } from 'lucide-react';
-
+import { useDispatch, useSelector } from 'react-redux'
+import { addOrder } from '../features/orders/orderSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+
+    const { user } = useSelector(state => state.auth)
+    const { cart } = useSelector(state => state.order)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const handleAddOrder = (id) => {
+        console.log(id)
+        dispatch(addOrder(id))
+        navigate("/auth/my-profile")
+    }
+
+
+    if (!cart) {
+        return (
+            <h1>No Items In Cart</h1>
+        )
+    }
+
+
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Back Button */}
@@ -26,6 +49,7 @@ const Cart = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                                     <input
                                         type="text"
+                                        value={user.name}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                                         placeholder="Enter your full name"
                                     />
@@ -33,6 +57,7 @@ const Cart = () => {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                                     <input
+                                        value={user.phone}
                                         type="tel"
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                                         placeholder="+91 98765 43210"
@@ -89,35 +114,6 @@ const Cart = () => {
                         </div>
                     </div>
 
-                    {/* Delivery Time */}
-                    <div className="bg-white rounded-xl shadow-sm border p-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                            <Clock className="h-5 w-5 mr-2 text-orange-500" />
-                            Delivery Time
-                        </h2>
-
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div className="border-2 border-orange-500 rounded-lg p-4 bg-orange-50">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800">ASAP</h3>
-                                        <p className="text-sm text-gray-600">25-30 minutes</p>
-                                    </div>
-                                    <input type="radio" name="delivery" className="text-orange-500" checked />
-                                </div>
-                            </div>
-
-                            <div className="border border-gray-300 rounded-lg p-4 hover:border-orange-500 cursor-pointer">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800">Schedule</h3>
-                                        <p className="text-sm text-gray-600">Choose time</p>
-                                    </div>
-                                    <input type="radio" name="delivery" className="text-orange-500" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     {/* Payment Method */}
                     <div className="bg-white rounded-xl shadow-sm border p-6">
@@ -139,7 +135,7 @@ const Cart = () => {
                                     <input type="radio" name="payment" className="text-orange-500" checked />
                                 </div>
                             </div>
-
+                            {/* 
                             <div className="border border-gray-300 rounded-lg p-4 hover:border-orange-500 cursor-pointer">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-3">
@@ -151,7 +147,7 @@ const Cart = () => {
                                     </div>
                                     <input type="radio" name="payment" className="text-orange-500" />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -162,37 +158,26 @@ const Cart = () => {
                         <h2 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h2>
 
                         <div className="space-y-4">
+
                             <div className="flex items-center space-x-4">
                                 <img
-                                    src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=100"
+                                    src={cart.image}
                                     alt="Dal Bati Churma"
                                     className="w-16 h-16 object-cover rounded-lg"
                                 />
                                 <div className="flex-1">
-                                    <h3 className="font-semibold text-gray-800">Dal Bati Churma</h3>
+                                    <h3 className="font-semibold text-gray-800">{cart.name}</h3>
                                     <p className="text-sm text-gray-600">Quantity: 1</p>
                                 </div>
-                                <span className="font-semibold text-gray-800">₹180</span>
+                                <span className="font-semibold text-gray-800">₹{cart.price}</span>
                             </div>
 
-                            <div className="flex items-center space-x-4">
-                                <img
-                                    src="https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=100"
-                                    alt="Poha Jalebi"
-                                    className="w-16 h-16 object-cover rounded-lg"
-                                />
-                                <div className="flex-1">
-                                    <h3 className="font-semibold text-gray-800">Poha Jalebi Combo</h3>
-                                    <p className="text-sm text-gray-600">Quantity: 1</p>
-                                </div>
-                                <span className="font-semibold text-gray-800">₹120</span>
-                            </div>
                         </div>
 
                         <div className="border-t pt-4 mt-4 space-y-2">
                             <div className="flex justify-between text-gray-600">
                                 <span>Subtotal</span>
-                                <span>₹300</span>
+                                <span>₹{cart.price}</span>
                             </div>
                             <div className="flex justify-between text-gray-600">
                                 <span>Delivery Fee</span>
@@ -205,7 +190,7 @@ const Cart = () => {
                             <div className="border-t pt-2">
                                 <div className="flex justify-between text-lg font-bold text-gray-800">
                                     <span>Total</span>
-                                    <span>₹335</span>
+                                    <span>₹{cart.price + 20 + 15}</span>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +211,7 @@ const Cart = () => {
                     </div>
 
                     {/* Place Order Button */}
-                    <button className="w-full bg-orange-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-600 transform hover:scale-105 transition duration-300 shadow-lg">
+                    <button onClick={() => handleAddOrder(cart._id)} className="w-full bg-orange-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-orange-600 transform hover:scale-105 transition duration-300 shadow-lg">
                         Place Order - ₹335
                     </button>
                 </div>

@@ -1,11 +1,42 @@
 import { ShoppingBag, User, MapPin, Phone, Mail, Edit, Package, Star, Clock, CreditCard } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../components/Loader';
+import { useEffect } from 'react';
+import { getOrders } from '../features/orders/orderSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Profile = () => {
 
     const { user } = useSelector(state => state.auth)
+    const { orders, orderLoading, orderSuccess, orderError, orderErrorMessage } = useSelector(state => state.order)
 
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    // Get total orders price
+    const totalSpent = orders.reduce((p, c) => p + c.meal.price, 0)
+
+
+
+
+
+    useEffect(() => {
+
+        if (!user) {
+            navigate("/login")
+        }
+
+
+        dispatch(getOrders())
+
+    }, [user])
+
+
+
+    if (orderLoading) {
+        return <Loader />
+    }
 
 
     return (
@@ -37,21 +68,21 @@ const Profile = () => {
                                     <Package className="h-5 w-5 text-orange-500" />
                                     <span className="text-gray-600">Total Orders</span>
                                 </div>
-                                <span className="font-semibold text-gray-800">24</span>
+                                <span className="font-semibold text-gray-800">{orders.length}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <CreditCard className="h-5 w-5 text-green-500" />
                                     <span className="text-gray-600">Total Spent</span>
                                 </div>
-                                <span className="font-semibold text-gray-800">₹4,320</span>
+                                <span className="font-semibold text-gray-800">₹{totalSpent}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <Star className="h-5 w-5 text-yellow-500" />
-                                    <span className="text-gray-600">Favorite Meal</span>
+                                    <span className="text-gray-600">Last Meal</span>
                                 </div>
-                                <span className="font-semibold text-gray-800">Dal Bati</span>
+                                <span className="font-semibold text-gray-800">{orders[0]?.meal?.name}</span>
                             </div>
                         </div>
                     </div>
@@ -110,175 +141,57 @@ const Profile = () => {
                         </div>
 
                         <div className="divide-y divide-gray-200">
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800">#ORD-001</h3>
-                                        <p className="text-sm text-gray-600">Placed on March 15, 2024</p>
-                                    </div>
-                                    <span className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">
-                                        Delivered
-                                    </span>
-                                </div>
+                            {
+                                orders.map(order => {
+                                    return (
+                                        <div className="p-6">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">{order._id}</h3>
+                                                    <p className="text-sm text-gray-600">{new Date(order.createdAt).toLocaleDateString('en-IN')}</p>
+                                                </div>
+                                                <span className="px-3 py-1 text-sm font-semibold rounded-full bg-gray-100 text-green-800">
+                                                    {order.status}
+                                                </span>
+                                            </div>
 
-                                <div className="flex items-center space-x-4 mb-4">
-                                    <img
-                                        src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=100"
-                                        alt="Dal Bati Churma"
-                                        className="w-16 h-16 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                        <h4 className="font-medium text-gray-800">Dal Bati Churma</h4>
-                                        <p className="text-sm text-gray-600">Quantity: 1</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-semibold text-gray-800">₹180</p>
-                                        <div className="flex items-center mt-1">
-                                            <Clock className="h-4 w-4 text-gray-400 mr-1" />
-                                            <span className="text-sm text-gray-600">25 mins</span>
+                                            <div className="flex items-center space-x-4 mb-4">
+                                                <img
+                                                    src={order.meal.image}
+                                                    alt={order.meal.image}
+                                                    className="w-16 h-16 object-cover rounded-lg"
+                                                />
+                                                <div className="flex-1">
+                                                    <h4 className="font-medium text-gray-800">{order.meal.name}</h4>
+                                                    <p className="text-sm text-gray-600">Quantity: 1</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="font-semibold text-gray-800">₹{order.meal.price}</p>
+                                                    <div className="flex items-center mt-1">
+                                                        <Clock className="h-4 w-4 text-gray-400 mr-1" />
+                                                        <span className="text-sm text-gray-600">25 mins</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between">
+                                                <Link to={`/auth/meal/${order.meal._id}`} className="text-orange-500 hover:text-orange-600 text-sm font-medium">
+                                                    Reorder
+                                                </Link>
+                                                <Link to={`/auth/meal/${order.meal._id}`} className="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                                                    Rate & Review
+                                                </Link>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <button className="text-orange-500 hover:text-orange-600 text-sm font-medium">
-                                        Reorder
-                                    </button>
-                                    <button className="text-gray-500 hover:text-gray-700 text-sm font-medium">
-                                        Rate & Review
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800">#ORD-002</h3>
-                                        <p className="text-sm text-gray-600">Placed on March 12, 2024</p>
-                                    </div>
-                                    <span className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">
-                                        Delivered
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center space-x-4 mb-4">
-                                    <img
-                                        src="https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=100"
-                                        alt="Poha Jalebi"
-                                        className="w-16 h-16 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                        <h4 className="font-medium text-gray-800">Poha Jalebi Combo</h4>
-                                        <p className="text-sm text-gray-600">Quantity: 2</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-semibold text-gray-800">₹240</p>
-                                        <div className="flex items-center mt-1">
-                                            <Clock className="h-4 w-4 text-gray-400 mr-1" />
-                                            <span className="text-sm text-gray-600">20 mins</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <button className="text-orange-500 hover:text-orange-600 text-sm font-medium">
-                                        Reorder
-                                    </button>
-                                    <div className="flex items-center">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                                        ))}
-                                        <span className="text-sm text-gray-600 ml-2">Rated</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <h3 className="font-semibold text-gray-800">#ORD-003</h3>
-                                        <p className="text-sm text-gray-600">Placed on March 10, 2024</p>
-                                    </div>
-                                    <span className="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">
-                                        Delivered
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center space-x-4 mb-4">
-                                    <img
-                                        src="https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=100"
-                                        alt="Indori Thali"
-                                        className="w-16 h-16 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                        <h4 className="font-medium text-gray-800">Indori Special Thali</h4>
-                                        <p className="text-sm text-gray-600">Quantity: 1</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-semibold text-gray-800">₹250</p>
-                                        <div className="flex items-center mt-1">
-                                            <Clock className="h-4 w-4 text-gray-400 mr-1" />
-                                            <span className="text-sm text-gray-600">30 mins</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <button className="text-orange-500 hover:text-orange-600 text-sm font-medium">
-                                        Reorder
-                                    </button>
-                                    <div className="flex items-center">
-                                        {[1, 2, 3, 4].map((star) => (
-                                            <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                                        ))}
-                                        <Star className="h-4 w-4 text-gray-300" />
-                                        <span className="text-sm text-gray-600 ml-2">Rated</span>
-                                    </div>
-                                </div>
-                            </div>
+                                    )
+                                })
+                            }
                         </div>
 
                         <div className="px-6 py-4 border-t">
                             <button className="text-orange-500 hover:text-orange-600 font-medium">
                                 View All Orders →
                             </button>
-                        </div>
-                    </div>
-
-                    {/* Favorite Meals */}
-                    <div className="bg-white rounded-xl shadow-sm border">
-                        <div className="px-6 py-4 border-b">
-                            <h2 className="text-xl font-bold text-gray-800">Favorite Meals</h2>
-                        </div>
-
-                        <div className="p-6">
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-orange-500 cursor-pointer">
-                                    <img
-                                        src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=100"
-                                        alt="Dal Bati Churma"
-                                        className="w-16 h-16 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                        <h4 className="font-medium text-gray-800">Dal Bati Churma</h4>
-                                        <p className="text-sm text-gray-600">Ordered 8 times</p>
-                                        <p className="text-orange-500 font-semibold">₹180</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-orange-500 cursor-pointer">
-                                    <img
-                                        src="https://images.pexels.com/photos/2474658/pexels-photo-2474658.jpeg?auto=compress&cs=tinysrgb&w=100"
-                                        alt="Poha Jalebi"
-                                        className="w-16 h-16 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1">
-                                        <h4 className="font-medium text-gray-800">Poha Jalebi Combo</h4>
-                                        <p className="text-sm text-gray-600">Ordered 6 times</p>
-                                        <p className="text-orange-500 font-semibold">₹120</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
