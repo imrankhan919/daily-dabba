@@ -7,12 +7,13 @@ import {
     BarChart3,
     Settings,
 } from 'lucide-react';
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutUser } from '../features/auth/authSlice';
 const Navbar = () => {
 
     const location = useLocation()
+    const navigate = useNavigate()
 
     const { user } = useSelector(state => state.auth)
     const { cart } = useSelector(state => state.order)
@@ -21,6 +22,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         dispatch(logOutUser())
+        navigate("/login")
 
     }
 
@@ -33,7 +35,7 @@ const Navbar = () => {
             <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
                 <div className="flex items-center justify-center h-16 border-b">
                     <ShoppingBag className="h-8 w-8 text-orange-500" />
-                    <span className="ml-2 text-xl font-bold text-gray-800">Admin Panel</span>
+                    <Link to={"/"}> <span className="ml-2 text-xl font-bold text-gray-800">Admin Panel</span></Link>
                 </div>
 
                 <nav className="mt-8">

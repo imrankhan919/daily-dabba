@@ -48,9 +48,28 @@ const orderSlice = createSlice({
                 state.orderLoading = false
                 state.orderSuccess = true
                 state.orders = [action.payload, ...state.orders]
+                state.cart = null
                 state.orderError = false
             })
             .addCase(addOrder.rejected, (state, action) => {
+                state.orderLoading = false
+                state.orderSuccess = false
+                state.orderError = true
+                state.orderErrorMessage = action.payload
+            })
+            .addCase(cancelOrder.pending, (state, action) => {
+                state.orderLoading = true
+                state.orderSuccess = false
+                state.orderError = false
+            })
+            .addCase(cancelOrder.fulfilled, (state, action) => {
+                state.orderLoading = false
+                state.orderSuccess = true
+                state.orders = state.orders.map(order => order._id === action.payload._id ? action.payload : order)
+                state.cart = null
+                state.orderError = false
+            })
+            .addCase(cancelOrder.rejected, (state, action) => {
                 state.orderLoading = false
                 state.orderSuccess = false
                 state.orderError = true
@@ -83,6 +102,18 @@ export const addOrder = createAsyncThunk("ORDER/ADD", async (id, thunkAPI) => {
     let token = thunkAPI.getState().auth.user.token
     try {
         return orderService.orderMeal(id, token)
+    } catch (error) {
+        const message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+    }
+
+})
+
+// ADD ORDERS
+export const cancelOrder = createAsyncThunk("ORDER/CANCEL", async (id, thunkAPI) => {
+    let token = thunkAPI.getState().auth.user.token
+    try {
+        return orderService.updateOrder(id, token)
     } catch (error) {
         const message = error.response.data.message
         return thunkAPI.rejectWithValue(message)

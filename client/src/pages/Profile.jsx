@@ -1,8 +1,9 @@
 import { ShoppingBag, User, MapPin, Phone, Mail, Edit, Package, Star, Clock, CreditCard } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify'
 import Loader from '../components/Loader';
 import { useEffect } from 'react';
-import { getOrders } from '../features/orders/orderSlice';
+import { cancelOrder, getOrders } from '../features/orders/orderSlice';
 import { Link, useNavigate } from 'react-router-dom';
 
 
@@ -18,6 +19,12 @@ const Profile = () => {
     const totalSpent = orders.reduce((p, c) => p + c.meal.price, 0)
 
 
+    const handleCancelOrder = (id) => {
+        dispatch(cancelOrder(id))
+        navigate("/")
+        toast.success('Order Cancelled')
+    }
+
 
 
 
@@ -30,7 +37,12 @@ const Profile = () => {
 
         dispatch(getOrders())
 
-    }, [user])
+
+        if (orderError && orderErrorMessage) {
+            toast.error(orderErrorMessage)
+        }
+
+    }, [user, orderError, orderErrorMessage])
 
 
 
@@ -178,6 +190,13 @@ const Profile = () => {
                                                 <Link to={`/auth/meal/${order.meal._id}`} className="text-orange-500 hover:text-orange-600 text-sm font-medium">
                                                     Reorder
                                                 </Link>
+                                                {
+                                                    order.status === "cancelled" ? (<Link to={`/auth/meal/${order.meal._id}`} className="text-orange-500 hover:text-orange-600 text-sm font-medium">
+
+                                                    </Link>) : (<button onClick={() => handleCancelOrder(order._id)} className="cursor-pointer text-red-500 hover:text-orange-600 text-sm font-medium">
+                                                        {order.status === "delivered" ? "" : "Cancel This Order"}
+                                                    </button>)
+                                                }
                                                 <Link to={`/auth/meal/${order.meal._id}`} className="text-gray-500 hover:text-gray-700 text-sm font-medium">
                                                     Rate & Review
                                                 </Link>

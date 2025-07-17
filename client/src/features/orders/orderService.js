@@ -20,15 +20,27 @@ const orderMeal = async (id, token) => {
         }
     }
 
-    console.log(options)
-
-    const response = await axios.post('/api/order/create-order/' + id, options)
-    console.log(response.data)
+    const response = await axios.post('/api/order/create-order/' + id, "", options)
     return response.data
+
+
+}
+
+const updateOrder = async (id, token) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put('/api/order/' + id, "", options)
+    return response.data
+
 
 }
 
 
-const orderService = { fetchOrders, orderMeal }
+const orderService = { fetchOrders, orderMeal, updateOrder }
 
 export default orderService

@@ -12,7 +12,6 @@ const Cart = () => {
     const navigate = useNavigate()
 
     const handleAddOrder = (id) => {
-        console.log(id)
         dispatch(addOrder(id))
         navigate("/auth/my-profile")
     }

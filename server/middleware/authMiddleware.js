@@ -11,11 +11,11 @@ const protect = async (req, res, next) => {
             next()
         } catch (error) {
             res.status(401)
-            throw new Error('Invalid Request : Unauthorised')
+            throw new Error('Invalid Request : Unauthorised Invalid Token')
         }
     } else {
         res.status(401)
-        throw new Error('Invalid Request : Unauthorised')
+        throw new Error('Invalid Request : Unauthorised No Token Found')
     }
 
 }
