@@ -4,7 +4,10 @@
   "main": "server.js",
   "scripts": {
     "server": "node server/server.js",
-    "dev": "nodemon server/server.js"
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm install && cd client && npm install && npm run build",
+    "start": "node server/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +15,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "colors": "^1.4.0",
+    "concurrently": "^9.2.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
