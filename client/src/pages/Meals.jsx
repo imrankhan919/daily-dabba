@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import FeaturedCard from '../components/FeaturedCard'
 import Loader from '../components/Loader'
-import { getMeals } from '../features/meals/MealSlice'
+import { getMeals } from '../features/meals/mealSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Meals = () => {

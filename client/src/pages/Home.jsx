@@ -2,7 +2,7 @@ import { Clock, Star } from 'lucide-react'
 import FeaturedCard from '../components/FeaturedCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { getMeals } from '../features/meals/MealSlice'
+import { getMeals } from '../features/meals/mealSlice'
 import Loader from '../components/Loader'
 
 const Home = () => {

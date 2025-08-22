@@ -2,7 +2,7 @@ import { ShoppingBag, Star, Clock, Users, ArrowLeft, Plus, Minus, ShoppingCart }
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { getMeal } from '../features/meals/MealSlice';
+import { getMeal } from '../features/meals/mealSlice';
 import Loader from '../components/Loader';
 import { addRating, getRatings } from '../features/ratings/ratingSlice';
 import { useState } from 'react';
