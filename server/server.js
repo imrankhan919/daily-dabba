@@ -1,52 +1,54 @@
-const express = require('express')
-require('dotenv').config()
-const path = require('path')
-const colors = require('colors')
-const connectDB = require('./config/dbConfig')
-const errorHandler = require('./middleware/errorHandler')
 
-const app = express()
-const PORT = process.env.PORT || 3000
+const express = require('express');
+require('dotenv').config();
+const path = require('path');
+const colors = require('colors');
 
-// DB CONNECTION
-connectDB()
+const connectDB = require('./config/dbConfig');
+const errorHandler = require('./middleware/errorHandler');
 
-// Body-Parser
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+const app = express();
+const PORT = process.env.PORT || 5000;
 
+// Database connection
+connectDB();
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Default Route
-if (process.env.NODE_ENV === "production") {
-    const __dirname = path.resolve();
-    app.use(express.static(path.join(__dirname, "/client/dist")));
+// API Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/meal', require('./routes/mealRoute'));
+app.use('/api/order', require('./routes/orderRoutes'));
+app.use('/api/rating', require('./routes/ratingsRoutes'));
 
-    app.get("/", (req, res) =>
-        res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"))
-    );
+// Serve React frontend in production
+if (process.env.NODE_ENV === 'production') {
+    const frontendPath = path.resolve(__dirname, '..', 'client', 'dist');
+
+    app.use(express.static(frontendPath));
+
+    // React Router fallback
+    app.get(/.*/, (req, res, next) => {
+        // Do not serve React for unknown API endpoints
+        if (req.path.startsWith('/api/')) {
+            return next();
+        }
+
+        res.sendFile(path.join(frontendPath, 'index.html'));
+    });
 } else {
-    app.get("/", (req, res) => {
-        res.send("API is running... (development mode)");
+    app.get('/', (req, res) => {
+        res.send('API is running... (development mode)');
     });
 }
 
-// Auth Routes
-app.use('/api/auth', require("./routes/authRoutes"))
+// Error handler
+app.use(errorHandler);
 
-// Admin Routes
-app.use("/api/admin", require("./routes/adminRoutes"))
-
-// Meal Routes
-app.use("/api/meal", require("./routes/mealRoute"))
-
-// Order Routes
-app.use("/api/order", require("./routes/orderRoutes"))
-
-// Rating Route
-app.use("/api/rating", require("./routes/ratingsRoutes"))
-
-// Error Handler
-app.use(errorHandler)
-
-app.listen(PORT, () => console.log(`SERVER IS RUNNING AT PORT : ${PORT}`.bgBlue.black))
+// Start server
+app.listen(PORT, () => {
+    console.log(`SERVER IS RUNNING AT PORT: ${PORT}`.bgBlue.black);
+});

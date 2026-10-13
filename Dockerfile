@@ -1,31 +1,29 @@
-FROM node:18-alpine
+# Build frontend
+FROM node:20-alpine AS frontend-build
 
-WORKDIR /usr/src/app
+WORKDIR /app/client
 
-# Install build tools for npm packages
-RUN apk add --no-cache bash python3 make g++
-
-# Copy package files
-COPY package*.json ./
-
-# Install backend dependencies
+COPY client/package*.json ./
 RUN npm install --legacy-peer-deps
 
-# Copy everything
-COPY . .
+COPY client/ ./
+RUN npm run build
 
-# Install and build frontend
-WORKDIR /usr/src/app/client
-RUN npm install --legacy-peer-deps && npm run build
+# Build backend
+FROM node:20-alpine
 
-# Back to root
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Remove unnecessary node_modules in client
-RUN rm -rf client/node_modules
+COPY package*.json ./
+RUN npm install --omit=dev
 
-EXPOSE 5000
+COPY server/ ./server/
+
+COPY --from=frontend-build /app/client/dist ./client/dist
 
 ENV NODE_ENV=production
+ENV PORT=5000
+
+EXPOSE 5000
 
 CMD ["node", "server/server.js"]
